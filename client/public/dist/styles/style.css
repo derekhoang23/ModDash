@@ -1,8 +1,8 @@
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: white;
-  background: 
-    url("https://unsplash.it/g/1440/900?random") 
+  background:
+    url("https://unsplash.it/g/1440/900?random")
     center center / 100% 100%
     fixed
 }
@@ -160,4 +160,19 @@ input {
   bottom: 0;
   /*background-color: white;*/
   opacity: .90;
+}
+
+.wheel{
+  position: absolute;
+  top: 90%;
+}
+
+.wheel img{
+  width: 40px
+}
+
+.trans-mode{
+  position: absolute;
+  top: 75%;
+  left: 5%;
 }

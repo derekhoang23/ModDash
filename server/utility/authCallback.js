@@ -15,28 +15,30 @@ const authCallback = function(req, res) {
       console.warn('error in getting Token', err);
     }
     oauth2Client.setCredentials(tokens);
-    console.log('success token', tokens);
     // after getting tokens, do a call to googlePlus API for user details, get their googleID
     plus.people.get({ userId: 'me', auth: oauth2Client })
     .then((profile) => {
       UserController.findOrCreateUser(profile, tokens)
       .spread((user, created) => {
-        console.log('user', user);
-        console.log('created', created);
-        if(created) { // this is for new users
-          return req.session.regenerate(() => {
-            req.session.googleid = profile.id
-            res.redirect('/')
-          })
-        } else {
-          if(req.session.googleid === profile.id) {
-            res.redirect('/');
-          }
-        }
-      })
+        //
+        // if(created) { // this is for new users
+        //   return req.session.regenerate(() => {
+        //     // give session a user.datavalues.id in order to query for all events to unique users
+        //     req.session.userId = user.id
+        //     req.session.googleid = user.googleid
+        //     res.redirect('/')
+        //   });
+        // } else {
+        //   req.session.userId = user.id
+        //   req.session.googleid = user.googleid
+        //   console.log('inside auth session', req.session);
+        //   res.redirect('/');
+        //   }
+        })
     })
     .catch(err => {
       console.log('did not get users profile', err);
     })
   });
+}
 module.exports = authCallback;

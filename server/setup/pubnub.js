@@ -7,6 +7,7 @@ var pubnub = new PubNub({
     // uuid: "myUniqueUUID",
     ssl: true,
     // origin: "custom.pubnub.com",
+    logVerbosity: false,
     presenceTimeout: 130,
     heartbeatInterval: 60
 })

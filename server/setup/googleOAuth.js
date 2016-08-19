@@ -7,7 +7,7 @@ var OAuth2 = google.auth.OAuth2;
 
 var oauth2Client = new OAuth2(process.env.GOOGLE_CLIENT_ID, 
   process.env.GOOGLE_CLIENT_SECRET, 
-  'http://localhost:9000/api/authCallback')
+  'http://localhost:9000/verified');
 
 // generate consent page url
 var url = oauth2Client.generateAuthUrl({

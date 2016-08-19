@@ -3,7 +3,7 @@ const getGeolocation = () => {
   
   const geoSuccess = (position) => {
     let geolocation = `${position.coords.latitude} ${position.coords.longitude}`;
-
+      // add token here too;
     fetch('http://localhost:9000/api/users/getGeolocation')
       .then((res) => res.json())
         .then((data) => {
@@ -34,12 +34,16 @@ const getGeolocation = () => {
   navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
 };
 
+
 const updateGeolocation = (geolocation) => {
+  var token = localStorage.getItem('token');
+
   fetch('http://localhost:9000/api/users/updateGeolocation', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'authorization': token
     },
     body: JSON.stringify({ geolocation })
   })

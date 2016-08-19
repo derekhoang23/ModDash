@@ -1,23 +1,29 @@
 const models = require('../models/models');
 const User = models.User;
+// const { User } = require('../models'); // once models is renamed to index.js
 const googleOAuth = require('./../../setup/googleOAuth');
 var oauth2Client = googleOAuth.oauth2Client;
 
-const findOrCreateUser = function(profile, tokens) {
+const findOrCreateUser = (profile, tokens) => {
   return User.findOrCreate({
-    where: {
-      googleid: profile.id},
+    where: { googleid: profile.id },
     defaults: {
-    lastName: profile.name.familyName,
-    firstName: profile.name.givenName,
-    email: profile.emails[0].value,
-    refreshToken: tokens.refresh_token,
-    accessToken: tokens.access_token
+      lastName: profile.name.familyName,
+      firstName: profile.name.givenName,
+      email: profile.emails[0].value,
+      refreshToken: tokens.refresh_token,
+      accessToken: tokens.access_token
     }
   });
 };
 
-// this needs to be fixed so that it's just doing User.findOne and returning the refreshToken as an attribute.
+const authUser = function(profile) {
+  return User.findOne({
+    where: {googleid: profile.id}
+  })
+}
+
+// TO DO: This needs to be fixed so that it's just doing User.findOne and returning the refreshToken as an attribute. 
 const getUserTokens = function(id) {
   return User.findOne({
     where: { id: id }
@@ -28,7 +34,7 @@ const getUserTokens = function(id) {
     });
 
     oauth2Client.refreshAccessToken((err, tokens) => {
-      console.log('token', tokens);
+      // console.log('token', tokens);
       oauth2Client.setCredentials({
         access_token: tokens.access_token,
         refresh_token: tokens.refresh_token
@@ -38,9 +44,11 @@ const getUserTokens = function(id) {
 };
 
 const getGeolocation = (id) => {
+  console.log('============== [userController - getGeolocation]: userId =', id);
+
   return User.findOne(
-    { attributes: ['geolocation']},
-    { where: {id: id} }
+    { attributes: ['id', 'geolocation'] },
+    { where: { id: id } }
   );
 };
 
@@ -65,6 +73,7 @@ const updateUserTransitMode = (id, transit) => {
 
 module.exports = {
   findOrCreateUser,
+  authUser,
   getUserTokens,
   getGeolocation,
   updateUserGeolocation,

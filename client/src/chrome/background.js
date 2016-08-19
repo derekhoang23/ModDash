@@ -1,3 +1,21 @@
+// chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
+//   console.log(token);
+//   fetch('http://localhost:9000/api/extensionAuth', {
+//     method: 'POST',
+//     body: JSON.stringify({token: token}),
+//     mode: 'cors-with-forced-preflight',
+//     headers: {'Content-Type': 'application/json'}
+//   })
+//   .then(res => {
+//     // console.log(res);
+//     return res.json();
+//   })
+//   .then(data => {
+//     console.log(data);
+//   });
+// });
+
+
 var pubnub = PUBNUB({
   subscribe_key: 'sub-c-db638056-601a-11e6-9bf3-02ee2ddab7fe',
 

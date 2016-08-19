@@ -4,6 +4,7 @@ import Time from './Time.jsx';
 import Calendar from './Calendar.jsx'
 import Form from './Form.jsx';
 import Setting from './Setting.jsx';
+import Login from './Login.jsx';
 import Chrono from '../lib/chrono.min.js';
 import artyom from '../lib/artyom.min.js';
 import $ from '../lib/jquery.js';
@@ -19,24 +20,33 @@ class App extends React.Component {
   }
 
   fetchAndUpdateEvents() {
-    fetch('http://localhost:9000/api/calendar/getDayEvents')
-      .then((res) => res.json())
-        .then((data) => {
-          let eventList = data.map((event) => {
-            return {
-              eventName: event.name,
-              location: event.location,
-              startTime: event.startdatetime,
-              eventUrl: event.eventUrl
-            };
-          });
+    var token = localStorage.getItem('token');
+    console.log('got token for fetch and update events', token);
+    // Post event to Google Calendar API
+    fetch('http://localhost:9000/api/calendar/getDayEvents', {
+      method: 'GET',
+      mode: 'cors-with-forced-preflight',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': token
+      }
+    })
+    .then((res) => res.json())
+      .then((data) => {
+        let eventList = data.map((event) => {
+          return {
+            eventName: event.name,
+            location: event.location,
+            startTime: event.startdatetime,
+            eventUrl: event.eventUrl
+          };
+        });
 
-        this.sortAndUpdateEvents(eventList);
-      })
-      .catch((err) => {
-        console.log('Error retrieving events', err);
-      })
-
+      this.sortAndUpdateEvents(eventList);
+    })
+    .catch((err) => {
+      console.log('Error retrieving events', err);
+    })
   }
 
   sortAndUpdateEvents(eventList) {
@@ -68,6 +78,9 @@ class App extends React.Component {
   render() {
     return (
       <div>
+        <div>
+          <Login />
+        </div>
         <div>
           <Time />
         </div>

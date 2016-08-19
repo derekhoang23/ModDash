@@ -1,7 +1,6 @@
 const models = require('../models/models');
 const Travel = models.Travel;
 
-
 const initiateTravel = function(event, initialEstimate) {
   return Travel.findOrCreate({
     where: {eventId: event.id},

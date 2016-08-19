@@ -14,7 +14,14 @@
     "cookies",
     "notifications",
     "background",
-    "identity"
+    "identity",
+    "storage",
+    "geolocation"
   ],
-  "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/ https://cdn.pubnub.com/; object-src 'self' "
+  "oauth2": {
+    "client_id": "620726441303-ba0bp99k03erdsr829sclks4cttst15u.apps.googleusercontent.com",
+    "scopes": ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.profile.emails.read"]
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiae2UgPyqMUdEzGv/Pk8qFTP4KPUuSsyk/6rd/Wj2mcNFinUvQ2dzOLC05tI2DnyZsnmQ7irM6gy48xHveNY0ugSyqAQuQ9j0bm6v8yngwd8aratKY0JhqXLEwDr7KH6iJ+sI539jrczXoiguQqm+kGMjan7VjZ9jx7z8pTkAdiInj5YtW+lmharb6YL7lvl1ep4UT9gfL3mNh5PgcCEVdzupa/3CXx3hT+6o25+xtBNROdY83/7btktSt4Wt4AfwmaIDF8g+F16NjR4dDOjppedozw707FUrmP7zjX2V+wZbiUnlXccvKIaDBiyiyepz5aOFBP1jr6BchZokNcRowIDAQAB",
+  "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/ https://cdn.pubnub.com/ http://localhost:9000; object-src 'self' "
 }

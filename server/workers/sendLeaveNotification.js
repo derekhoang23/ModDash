@@ -1,39 +1,44 @@
 const agenda = require('./agenda');
 const pubnub = require('./../setup/pubnub');
-const origin = '944 Market St San Francisco, CA 94102';
+const UserController = require('../db/controllers/userController');
 
 agenda.define('send leave notification', function(job, done) {
-  // use pubnub to send notification
-  job.attrs.data.origin = origin;
-  var event = job.attrs.data;
+  return UserController.getGeolocation(job.attrs.data.userId)
+  .then((data) => data.dataValues.geolocation)
+  .then((geolocation) => {
+    job.attrs.data.origin = geolocation;
 
-  // console.log('am i getting map direction data', mapData);
-  pubnub.publish({
-    message: event,
-    channel: 'timeToLeave',
-    sendByPost: false, // true to send via post
-    storeInHistory: false //override default storage options
-    // meta: { "cool": "meta" } // publish extra meta with the request
-    }, function (status, response) {
-      // handle status, response
-      console.log('map notification was created')
-    }
-  );
+    // Send notification through Pubnub
+    var event = job.attrs.data;
 
-  // after sending notification, agenda.cancel
-  // agenda.cancel({"_id": job._id}, function(err, jobs) {
-  //   console.log('canceled job after notification was sent', jobs);
-  // })
+    pubnub.publish({
+      message: event,
+      channel: 'timeToLeave',
+      sendByPost: false, // true to send via post
+      storeInHistory: false // override default storage options
+      // meta: { "cool": "meta" } // publish extra meta with the request
+      },
+      (status, response) => {
+        // Handle status and response
+        console.log('Map notification was created.')
+      }
+    );
 
-  console.log('sending notification to user to leave now for event:', event.name);
+    // after sending notification, agenda.cancel
+    // agenda.cancel({"_id": job._id}, function(err, jobs) {
+    //   console.log('canceled job after notification was sent', jobs);
+    // })
 
-  done();
+    console.log('Sending notification to user to leave now for event:', event.name);
+
+    done();
+  });
 });
 
-const sendLeaveNotification = function(notificationTime, eventData) {
-  console.log('scheduling a leave notification for event', eventData.name, 'at',  notificationTime)
+const sendLeaveNotification = (notificationTime, eventData) => {
+  console.log('Scheduling a leave notification for event ', eventData.name, ' at ',  notificationTime);
   // pubnub publish
   agenda.schedule(notificationTime, 'send leave notification', eventData);
-}
+};
 
 module.exports = sendLeaveNotification;

@@ -5,8 +5,9 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const db = require('./db/db.js');
 const session = require('express-session')
-// const models = require('./db/models/models');
-// const Event = require('./db/')
+const extensionAuth = require('./utility/extensionAuth');
+const GoogleAuthUrl = require('./setup/googleOAuth').url;
+const authCallback = require('./utility/authCallback');
 
 const router = require('./routes');
 
@@ -14,34 +15,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../client/public/dist/')));
 
-// var allowCrossDomain = function(req, res, next) {
-//   var allowedHost = [
-//     'http://localhost',
-//     'http://localhost:9000',
-//     'chrome-extension://fmjmpkklgmmfnbfeembiokopaknddecl'
-//   ];
-//   console.log('server session', req.session);
-//   if(allowedHost.indexOf(req.headers.origin) !== -1) {
-//     res.header('Access-Control-Allow-Credentials', true);
-//     res.header('Access-Control-Allow-Origin', req.headers.origin)
-//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-//     res.header('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
-//     next();
-//   } else {
-//     res.send(401, {auth: false});
-//   }
-// }
 
-  app.use(session({secret: 'secret',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    httpOnly: false
-    }
-  }));
-  // app.use(allowCrossDomain);
 
-app.all('/api/*', function(req, res, next) {
+
+
+app.all('/*', function(req, res, next) {
+  // access control allow origin has to be chrome:extension/chromeID
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
   res.header("Access-Control-Allow-Methods", "GET, PUT, POST, OPTIONS");
@@ -51,19 +30,28 @@ app.all('/api/*', function(req, res, next) {
   return res.sendStatus(204);
 })
 
+//MIDDLEWARE HERE
 app.use('/api', router);
+
+// extensionAuth route
+app.post('/extensionAuth', extensionAuth);
+
+// webAuth routes
+app.get('/auth', function(req, res) {
+  res.redirect(GoogleAuthUrl);
+});
+// google redirect after auth sign in to get code for access token/refresh token
+app.get('/verified', authCallback);
 
 // app.get('/', (req, res) => {
 //   // google username
-//   console.log('req', req.session);
-//   if (typeof req.session.googleid !== 'undefined') {
-//     console.log('verified login: ', req.session.googleid);
-//     res.sendFile(path.join(__dirname + '/../client/public/dist/index.html'));
-//     res.send({auth: true, id: req.session.googleid})
-//   }
+//   // console.log('req in every get', req.session);
+//   // if (typeof req.session.googleid !== 'undefined') {
+//   //   console.log('verified login: ', req.session.googleid);
+//   //   res.sendFile(path.join(__dirname + '/../client/public/dist/index.html'));
+//   //   res.send({auth: true, id: req.session.googleid})
+//   // }
+
 // });
-
-
-
 
 module.exports = app;

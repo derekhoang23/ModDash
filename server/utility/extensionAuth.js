@@ -1,12 +1,13 @@
-const UserController = require('./../db/controllers/userController.js');
+const UserController = require('../db/controllers').UserController;
+// const { UserController } = require('../db/controllers');
 const googleOAuth = require('./../setup/googleOAuth');
 const google = require('googleapis');
 const plus = google.plus('v1');
 const Promise = require('bluebird');
 plus.people.get = Promise.promisify(plus.people.get);
 var oauth2Client = googleOAuth.oauth2Client;
-const jwt = require('jsonwebtoken')
-
+const jwt = require('jsonwebtoken');
+const uuid = require('node-uuid');
 
 const extensionAuth = function(req, res) {
   // do oAuth with the code that comes back from google
@@ -22,6 +23,10 @@ const extensionAuth = function(req, res) {
     UserController.authUser(profile)
     .then(user => {
       if (user) {
+        // put into pubnub module
+        var pubnubid = uuid.v4();
+        UserController.updatePubnub(user.dataValues.id, pubnubid);
+        
         var tokenOptions = {
           issuer: 'NeverMissOut'
         }
@@ -30,7 +35,8 @@ const extensionAuth = function(req, res) {
         res.json({
           success: true,
           message: 'here is your token',
-          token: token
+          token: token,
+          channel: pubnubid
         });
       }
     });
@@ -42,5 +48,6 @@ const extensionAuth = function(req, res) {
       message: 'please log in again'
     })
   })
-}
+};
+
 module.exports = extensionAuth;

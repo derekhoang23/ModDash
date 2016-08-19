@@ -1,6 +1,5 @@
-const models = require('../models/models');
-const User = models.User;
-// const { User } = require('../models'); // once models is renamed to index.js
+const User = require('../models').User;
+// const { User } = require('../models');
 const googleOAuth = require('./../../setup/googleOAuth');
 var oauth2Client = googleOAuth.oauth2Client;
 
@@ -44,12 +43,11 @@ const getUserTokens = function(id) {
 };
 
 const getUserInfo = (id) => {
-  console.log('============== [userController - getGeolocation]: userId =', id);
 
   return User.findOne({
     where: { id: id },
     attributes: ['id', 'geolocation', 'transitmode']
-  });
+
 };
 
 const updateUserGeolocation = (id, geolocation) => {
@@ -78,12 +76,28 @@ const updateUserTransitMode = (id, transit) => {
 //     attributes:['id', 'transitmode']
 //   })
 // }
+const updatePubnub = (id, pubnubid) => {
+  return User.update(
+    { pubnubid: pubnubid },
+    { where: {id: id} })
+    .catch(err => {
+      console.log('failure to update pubnubid in user', err);
+    })
+}
+
+const getUser = (id) => {
+  return User.findOne(
+    { where: { id: id } }
+  );
+}
 
 module.exports = {
   findOrCreateUser,
   authUser,
   getUserTokens,
   getUserInfo,
-  updateUserGeolocation,
   updateUserTransitMode
+  updateUserGeolocation,
+  updatePubnub,
+  getUser
 };

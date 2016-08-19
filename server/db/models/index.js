@@ -58,11 +58,11 @@ User.sync()
 ;
 
 module.exports = {
-  User: User,
-  Calendar: Calendar,
-  Event: Event,
-  GuestList: GuestList,
-  GuestListUser: GuestListUser,
-  Travel: Travel,
-  Attachment: Attachment
+  User,
+  Calendar,
+  Event,
+  GuestList,
+  GuestListUser,
+  Travel,
+  Attachment
 };

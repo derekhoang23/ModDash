@@ -1,7 +1,8 @@
+const EventController = require('../db/controllers').EventController;
+// const { EventController } = require('../db/controllers');
 const agenda = require('./agenda');
-const getTrafficTime = require('./../utility/getTrafficTime');
+const getTrafficTime = require('../utility/getTrafficTime');
 const sendLeaveNotification = require ('./sendLeaveNotification');
-const EventController = require('./../db/controllers/eventController');
 
 const recurringCheck = function(event) {
   console.log('inside recurringCheck');  

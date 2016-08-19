@@ -1,5 +1,5 @@
-const models = require('../models/models');
-const Travel = models.Travel;
+const Travel = require('../models').Travel;
+// const { Travel } = require('../models');
 
 const initiateTravel = function(event, initialEstimate) {
   return Travel.findOrCreate({
@@ -17,11 +17,11 @@ const initiateTravel = function(event, initialEstimate) {
       userId: event.userId
     }
   });
-}
+};
 
 const getAllTravel = function() {
   return Travel.findAll()
-}
+};
 
 // const initiateTravelMode = function(travel) {
 //   return Travel.findOrCreate({
@@ -32,4 +32,4 @@ const getAllTravel = function() {
 module.exports = {
   initiateTravel,
   getAllTravel
-}
+};

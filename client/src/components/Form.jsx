@@ -114,11 +114,9 @@ class Form extends React.Component {
       console.log('res', res);
       return res.json();
     }).then((data) => {
-      // Refreshes today's events in order including new event that was just added
+      // Refreshes today's events in chronological order including new event that was just added
       this.props.refreshEvents();
-    }).catch((err) => {
-      console.log('ERROR!', err);
-    });
+    }).catch((err) => { console.log('Error posting event to Google Calendar:\n', err); });
 
     this.closeModal();
   }

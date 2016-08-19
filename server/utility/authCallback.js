@@ -1,5 +1,6 @@
-const UserController = require('./../db/controllers/userController.js');
-const googleOAuth = require('./../setup/googleOAuth');
+const UserController = require('../db/controllers').UserController;
+// const { UserController } = require('../db/controllers');
+const googleOAuth = require('../setup/googleOAuth');
 const google = require('googleapis');
 const plus = google.plus('v1');
 const Promise = require('bluebird');

@@ -1,5 +1,6 @@
+const UserController = require('../db/controllers').UserController;
+// const { UserController } = require('./../db/controllers');
 const requestPromise = require('request-promise');
-const UserController = require('./../db/controllers/userController');
 
 const url = 'https://maps.googleapis.com/maps/api/distancematrix/json';
 

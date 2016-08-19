@@ -1,10 +1,8 @@
-const UserController = require('./../db/controllers/userController');
+const UserController = require('../db/controllers').UserController;
+// const { UserController } = require('../db/controllers');
 
 const getUserGeolocation = (req, res) => {
-  // TO DO: User ID hardcoded for now, but should not be. The id should be in the request.
-  var userId = 2;
-
-  return UserController.getGeolocation(userId)
+  return UserController.getGeolocation(req.userId)
     .then((data) => { res.send(data.dataValues); })
     .catch((err) => { res.sendStatus(404); });
 };

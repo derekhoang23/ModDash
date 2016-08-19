@@ -1,22 +1,33 @@
 const getGeolocation = () => {
   let geoOptions = { timeout: 10000 };
   
+
+
+ 
   const geoSuccess = (position) => {
     let geolocation = `${position.coords.latitude} ${position.coords.longitude}`;
       // add token here too;
-    fetch('http://localhost:9000/api/users/getGeolocation')
-      .then((res) => res.json())
-        .then((data) => {
-          // If current geolocation doesn't match geolocation in DB, then update DB
-          if (data.geolocation !== geolocation) {
-            updateGeolocation(geolocation);
-          } else {
-            console.log('Geolocation not updated as current geolocation has not changed.');
-          }
-        })
-        .catch((err) => {
-          console.log('Error retrieving user\'s geolocation from database.\n', err);
-        });
+    var token = localStorage.getItem('token');
+    fetch('http://localhost:9000/api/users/getGeolocation', {
+      method: 'GET',
+      headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'authorization': token
+      }
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      // If current geolocation doesn't match geolocation in DB, then update DB
+      if (data.geolocation !== geolocation) {
+        updateGeolocation(geolocation);
+      } else {
+        console.log('Geolocation not updated as current geolocation has not changed.');
+      }
+    })
+    .catch((err) => {
+      console.log('Error retrieving user\'s geolocation from database.\n', err);
+    });
   };
 
   const geoError = (error) => {
@@ -33,7 +44,6 @@ const getGeolocation = () => {
 
   navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
 };
-
 
 const updateGeolocation = (geolocation) => {
   var token = localStorage.getItem('token');

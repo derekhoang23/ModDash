@@ -1,8 +1,9 @@
-const UserController = require('./../db/controllers/userController');
-const Event = require('./../db/controllers/eventController');
+const UserController = require('../db/controllers').UserController;
+const EventController = require('../db/controllers').EventController;
+// const { UserController, EventController } = require('../db/controllers');
 const google = require('googleapis');
 const calendar = google.calendar('v3');
-const googleOAuth = require('./../setup/googleOAuth');
+const googleOAuth = require('../setup/googleOAuth');
 const oauth2Client = googleOAuth.oauth2Client;
 const Promise = require('bluebird');
 

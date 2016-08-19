@@ -3,7 +3,6 @@ const PubNub = require('pubnub');
 var pubnub = new PubNub({
     subscribeKey: process.env.PUBNUB_SUBSCRIBE_KEY,
     publishKey: process.env.PUBNUB_PUBLISH_KEY,
-    logVerbosity: true,
     // uuid: "myUniqueUUID",
     ssl: true,
     // origin: "custom.pubnub.com",

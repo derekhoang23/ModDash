@@ -1,5 +1,5 @@
-const models = require('../models/models');
-const Event = models.Event;
+const Event = require('../models').Event;
+// const { Event } = require('../models');
 const moment = require('moment');
 const zone = require('moment-timezone');
 const db = require('../db.js');

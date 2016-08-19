@@ -8,16 +8,9 @@ const url = 'https://maps.googleapis.com/maps/api/distancematrix/json';
 const addTravel = (event) => {
   console.log('=========================== [addTravel]: event.dataValues\n', event.dataValues);
 
-  return UserController.getUserInfo(event.dataValues.userId)
+  return UserController.getUser(event.dataValues.userId)
   .then((data) => {
-<<<<<<< HEAD
-    console.log('DATA', data)
-=======
-    console.log('========================= [addTravel] Data from getGeolocation (includes userId for now)', data.dataValues);
-    return data.dataValues.geolocation;
-  })
-  .then((geolocation) => {
->>>>>>> master
+
     var options = {
       url,
       qs: {

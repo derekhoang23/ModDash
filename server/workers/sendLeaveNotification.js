@@ -8,6 +8,7 @@ agenda.define('send leave notification', function(job, done) {
 
   return UserController.getUser(job.attrs.data.userId)
   .then((user) => {
+    console.log('send leave notify user', user);
     job.attrs.data.origin = user.dataValues.geolocation;
     var channel = user.dataValues.pubnubid;
 

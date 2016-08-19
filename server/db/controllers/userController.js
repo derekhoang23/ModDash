@@ -46,8 +46,8 @@ const getUserInfo = (id) => {
 
   return User.findOne({
     where: { id: id },
-    attributes: ['id', 'geolocation', 'transitmode']
-
+    attributes: ['id', 'geolocation', 'transit`mode']
+  })
 };
 
 const updateUserGeolocation = (id, geolocation) => {
@@ -96,7 +96,7 @@ module.exports = {
   authUser,
   getUserTokens,
   getUserInfo,
-  updateUserTransitMode
+  updateUserTransitMode,
   updateUserGeolocation,
   updatePubnub,
   getUser

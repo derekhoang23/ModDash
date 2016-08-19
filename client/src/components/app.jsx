@@ -47,6 +47,18 @@ class App extends React.Component {
     .catch((err) => {
       console.log('Error retrieving events', err);
     })
+
+    // fetchUserInfo() {
+    //   var token = localStorage.getItem('token');
+    //   fetch('http://localhost:9000/api/', {
+    //     method: 'GET',
+    //     mode: 'cors-with-forced-preflight',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'authorization': token
+    //     }
+    //   })
+    // }
   }
 
   sortAndUpdateEvents(eventList) {

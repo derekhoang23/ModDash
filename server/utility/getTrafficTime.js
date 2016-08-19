@@ -6,8 +6,10 @@ const url = 'https://maps.googleapis.com/maps/api/distancematrix/json';
 
 const getTrafficTime = function(event) {
   // event.dataValues.userId
+  console.log('in traffic time', event.dataValues);
   return UserController.getUserInfo(event.dataValues.userId)
   .then((data) => {
+    console.log('is this data.values for getTrafficTime', data.dataValues);
     var options = {
       url,
       qs: {

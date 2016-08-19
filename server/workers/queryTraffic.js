@@ -5,17 +5,17 @@ const getTrafficTime = require('../utility/getTrafficTime');
 const sendLeaveNotification = require ('./sendLeaveNotification');
 
 const recurringCheck = function(event) {
-  console.log('inside recurringCheck');  
+  console.log('inside recurringCheck', event);
   const timeToCheckAgain = 180000; // 3 min
   getTrafficTime(event)
   .then(times => {
     if (Date.now() + times.traffic + 300000 >= Date.parse(event.dataValues.startdatetime)) {
-      console.log('traffic is over start time, sending notification'); 
+      console.log('traffic is over start time, sending notification');
       event.dataValues.traffic = times.traffic;
       sendLeaveNotification(times.notificationTime, event.dataValues);
     } else {
       console.log('traffic is not over start time, do setTimeout to make another check in 3 minutes');
-      // polling is a time-sensitive way to query data 
+      // polling is a time-sensitive way to query data
       setTimeout(function() {
         console.log('setTimeout recurringCheck triggered 3 minute later');
         recurringCheck(event);
@@ -33,6 +33,7 @@ agenda.define('query traffic', function(job, done) {
 
   return EventController.retrieveEvent(eventId)
   .then(event => {
+    console.log('am i gettign events', event);
     recurringCheck(event);
     // console.log('event', event);
     // return getTrafficTime(event)
@@ -48,7 +49,7 @@ agenda.define('query traffic', function(job, done) {
       // sendLeaveNotification(times.notificationTime, event.dataValues);
       // schedule notification for leaving
     // });
-  // });  
+  // });
   // then agenda.cancel({id: jobiD}) or some other kind of identifier of the job we were doing
   done();
 });

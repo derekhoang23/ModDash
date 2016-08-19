@@ -14,14 +14,14 @@ const addEvent = function(req, res) {
   var userId = req.userId;
 
   return UserController.getUserTokens(userId)
-  .then(data => { 
-    const params = {calendarId: 'primary', auth: oauth2Client, resource: req.body}; 
+  .then(data => {
+    const params = {calendarId: 'primary', auth: oauth2Client, resource: req.body};
     return calendar.events.insert(params)
     // turn this into a google calendar function module
   })
   .then(data => {
     res.send(data);
-    
+
     // split pubnub functions into its own module
     data.messageType = 'eventAdded';
     UserController.getUser(userId)
@@ -37,14 +37,14 @@ const addEvent = function(req, res) {
         },
         (status, response) => {
           // handle status, response
-          console.log('pubnub notification "eventAdded" was sent to client');
+          console.log('pubnub notification "eventAdded" was sent to client!!');
         }
       );
     });
 
-    return data;     
+    return data;
   })
-  .then(data => EventController.insertEvent(data, userId)) // make everything look like this 
+  .then(data => EventController.insertEvent(data, userId)) // make everything look like this
   .catch(err => {
     console.warn('error in addEvent utility function', err);
   });

@@ -4,6 +4,7 @@ const db = require('../db.js');
 module.exports = db.define('user', {
   lastName: Sequelize.STRING,
   firstName: Sequelize.STRING,
+  transitmode: Sequelize.STRING,
   email: Sequelize.STRING,
   googleid: Sequelize.STRING,
   pubnubid: Sequelize.STRING,

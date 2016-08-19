@@ -9,7 +9,7 @@ const updateGeolocation = require('./utility/updateGeolocation');
 const getDayEvents = require('./utility/getDayEvents');
 const authCallback = require('./utility/authCallback');
 const queryTraffic = require('./workers/queryTraffic');
-
+const updateTransit = require('./utility/updateTransitMode');
 // put this parent function elsewhere later, but for now keep it here to understand what is happening.
 // first add event, then add travel, then set up queryTraffic worker
 var addEventAndAddTravel = function(req, res) {
@@ -27,6 +27,7 @@ var addEventAndAddTravel = function(req, res) {
 router.get('/test', function(req, res) {
   res.sendStatus(200);
 });
+
 // Authorization Routes
 
 router.get('/auth', function(req, res) {
@@ -34,6 +35,7 @@ router.get('/auth', function(req, res) {
 });
 // google redirect after auth sign in to get code for access token/refresh token
 router.get('/authCallback', authCallback);
+
 
 // Calendar Routes
 router.post('/calendar/addEvent', addEventAndAddTravel);
@@ -45,5 +47,6 @@ router.get('/calendar/getDayEvents', getDayEvents);
 // User Routes
 router.get('/users/getGeolocation', getUserGeolocation);
 router.post('/users/updateGeolocation', updateGeolocation);
+router.post('/users/updateTransit', updateTransit);
 
 module.exports = router;

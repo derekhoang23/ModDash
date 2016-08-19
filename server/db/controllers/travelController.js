@@ -24,6 +24,12 @@ const getAllTravel = function() {
   return Travel.findAll()
 }
 
+// const initiateTravelMode = function(travel) {
+//   return Travel.findOrCreate({
+//     where:
+//   })
+// }
+
 module.exports = {
   initiateTravel,
   getAllTravel

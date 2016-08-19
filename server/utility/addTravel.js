@@ -15,7 +15,7 @@ const addTravel = function(event) {
       key: process.env.GOOGLE_MAPS_API_KEY,
       origins: origins,
       destinations: event.dataValues.location,
-      mode: 'driving',
+      mode: event.dataValues.transmode,
       arrival_time: event.dataValues.startdatetime,
       // departure_time: 'now',
       units: 'imperial'

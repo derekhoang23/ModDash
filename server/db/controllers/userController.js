@@ -52,9 +52,21 @@ const updateUserGeolocation = (id, geolocation) => {
       .catch((err) => err);
 };
 
+const updateUserTransitMode = (id, transit) => {
+  return User.update (
+    {transitmode: transitmode},
+    {where: {id: id}}
+  )
+  .then((result) => {
+    console.log('result', result);
+  })
+  .catch((err) => err);
+}
+
 module.exports = {
   findOrCreateUser,
   getUserTokens,
   getGeolocation,
-  updateUserGeolocation
+  updateUserGeolocation,
+  updateUserTransitMode
 };

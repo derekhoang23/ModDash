@@ -33,12 +33,21 @@ class Setting extends React.Component {
 
   handleSubmit() {
     // e.preventDefault();
-    console.log('state', this.state.selectedOption)
+    var token = localStorage.getItem('token');
+    console.log('client users token', token)
+    var state = this.state.selectedOption;
+    console.log('state', state);
+    var transit = {transit: state};
+
+    console.log('transit', transit);
     fetch('http://localhost:9000/api/users/updateTransit', {
       method: 'POST',
-      body: this.state.selectedOption,
+      body: JSON.stringify(transit),
       mode: 'cors-with-forced-preflight',
-      headers: {'Content-Type': 'application/json'}
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': token
+      }
     })
     .then((res) => {
       return res.json();

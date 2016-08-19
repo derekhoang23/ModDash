@@ -7,19 +7,16 @@ const url = 'https://maps.googleapis.com/maps/api/distancematrix/json';
 const addTravel = (event) => {
   console.log('=========================== [addTravel]: event.dataValues\n', event.dataValues);
 
-  return UserController.getGeolocation(event.dataValues.userId)
+  return UserController.getUserInfo(event.dataValues.userId)
   .then((data) => {
-    console.log('========================= Data from getGeolocation (includes userId for now)', data.dataValues);
-    return data.dataValues.geolocation;
-  })
-  .then((geolocation) => {
+    console.log('DATA', data)
     var options = {
       url,
       qs: {
         key: process.env.GOOGLE_MAPS_API_KEY,
-        origins: geolocation,
+        origins: data.dataValues.geolocation,
         destinations: event.dataValues.location,
-        mode: 'driving',
+        mode: data.dataValues.transitmode,
         arrival_time: event.dataValues.startdatetime,
         // departure_time: 'now',
         units: 'imperial'

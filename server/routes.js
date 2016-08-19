@@ -39,6 +39,7 @@ var addEventAndAddTravel = (req, res) => {
 
 router.use(function(req, res, next) {
   var token = req.headers.authorization;
+  console.log('backend USERS TOKEN', token);
   if (token) {
       jwt.verify(token, process.env.JWT_SECRET, {issuer: 'NeverMissOut'}, function(err, decoded) {
       if (err) {

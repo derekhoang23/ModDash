@@ -1,9 +1,9 @@
 const UserController = require('./../db/controllers/userController');
 
 const updateTransitMode =  (req, res) => {
-  console.log('request body', req.body);
-  var userId = 2
-  return UserController.updateTransitMode(userId, req.body)
+  var userId = req.userId;
+  var transit = req.body.transit
+  return UserController.updateUserTransitMode(userId, transit)
 }
 
 module.exports = updateTransitMode;

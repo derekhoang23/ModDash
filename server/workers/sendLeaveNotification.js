@@ -3,11 +3,12 @@ const pubnub = require('./../setup/pubnub');
 const UserController = require('../db/controllers/userController');
 
 agenda.define('send leave notification', function(job, done) {
-  return UserController.getGeolocation(job.attrs.data.userId)
-  .then((data) => data.dataValues.geolocation)
+  return UserController.getUserInfo(job.attrs.data.userId)
+  .then((data) =>{
+  console.log('agenda', data)
+  data.dataValues.geolocation })
   .then((geolocation) => {
     job.attrs.data.origin = geolocation;
-
     // Send notification through Pubnub
     var event = job.attrs.data;
 

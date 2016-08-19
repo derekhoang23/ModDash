@@ -7,25 +7,6 @@ const url = 'https://maps.googleapis.com/maps/api/distancematrix/json';
 const addTravel = (event) => {
   console.log('=========================== [addTravel]: event.dataValues\n', event.dataValues);
 
-<<<<<<< HEAD
-const addTravel = function(event) {
-
-  // Try to refactor out below as getTrafficTime is basically doing the same thing
-  //////////////////////////////////////////////////////////
-  var options = {
-    url,
-    qs: {
-      key: process.env.GOOGLE_MAPS_API_KEY,
-      origins: origins,
-      destinations: event.dataValues.location,
-      mode: event.dataValues.transmode,
-      arrival_time: event.dataValues.startdatetime,
-      // departure_time: 'now',
-      units: 'imperial'
-      // traffic_model: 'best_guess'
-    }
-  };
-=======
   return UserController.getGeolocation(event.dataValues.userId)
   .then((data) => {
     console.log('========================= Data from getGeolocation (includes userId for now)', data.dataValues);
@@ -45,10 +26,9 @@ const addTravel = function(event) {
         // traffic_model: 'best_guess'
       }
     };
->>>>>>> master
 
     console.log('========================= [addTravel]: options\n', options);
-    
+
     // Request to Google Maps API for travel data
     return requestPromise(options);
   })

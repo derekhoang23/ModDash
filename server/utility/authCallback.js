@@ -22,21 +22,6 @@ const authCallback = function(req, res) {
     .then((profile) => {
       UserController.findOrCreateUser(profile, tokens)
       .spread((user, created) => {
-        //
-        // if(created) { // this is for new users
-        //   return req.session.regenerate(() => {
-        //     // give session a user.datavalues.id in order to query for all events to unique users
-        //     req.session.userId = user.id
-        //     req.session.googleid = user.googleid
-        //     res.redirect('/')
-        //   });
-        // } else {
-        //   req.session.userId = user.id
-        //   req.session.googleid = user.googleid
-        //   console.log('inside auth session', req.session);
-        //   res.redirect('/');
-        //   }
-        })
         // console.log('user', user);
         // console.log('created', created);
         // NOTE: REDIRECT THEM TO SPLASH PAGE HERE.

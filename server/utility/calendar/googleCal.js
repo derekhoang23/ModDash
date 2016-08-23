@@ -6,7 +6,6 @@ const Promise = require('bluebird');
 calendar.events.insert = Promise.promisify(calendar.events.insert);
 calendar.events.list = Promise.promisify(calendar.events.list);
 // calendar.events.delete = Promise.promisify(calendar.events.delete);
-//
 
 const addEventToGoogleCal = (userId, eventDetails) => {
   return googleAuth.getUserTokens(userId)

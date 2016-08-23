@@ -44,7 +44,6 @@ const deleteEventFromGcal = (req, res) => {
     });
 };
 
-
 module.exports = {
   addEventAndAddTravel,
   getDayEvents,

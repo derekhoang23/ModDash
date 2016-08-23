@@ -5,7 +5,7 @@ const removeEvent = (userId, eventId) => {
   return googleAuth.getUserTokens(userId)
   .then(oauth2Client => googleCal.deleteEvent(oauth2Client, eventId))
   .then(data => {
-    return Event.deleteEvent(userId, data);
+    res.send(data);
   })
   .catch((err) => {
     console.log('did not successfully delete event from gcal', err);

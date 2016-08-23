@@ -179,7 +179,11 @@ class App extends React.Component {
           <Time />
         </div>
         <div>
+<<<<<<< 006f746812a22ab38008e63d3518725e5953153d
           <Calendar fetch={this.fetchAndUpdateEvents.bind(this)} events={this.state.events} />
+=======
+          <Calendar deleteEvent={this.deleteAndUpdateEvent.bind(this)} events={this.state.events} />
+>>>>>>> mouse over event on each cal event and able to send gcal id to main app component
         </div>
         <div>
           <Form

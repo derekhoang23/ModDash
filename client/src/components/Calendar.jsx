@@ -20,13 +20,8 @@ class Calendar extends React.Component {
         </div>
         <div>
         {this.props.events.map((event, i) =>
-<<<<<<< 006f746812a22ab38008e63d3518725e5953153d
           <CalendarEntry fetch={this.props.fetch} key={i} event={event} />
           )}
-=======
-            <CalendarEntry deleteEvent={this.props.deleteEvent} key={i} event={event} />
-        )}
->>>>>>> mouse over event on each cal event and able to send gcal id to main app component
         </div>
       </div>
     );

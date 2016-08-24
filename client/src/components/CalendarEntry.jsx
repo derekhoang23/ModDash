@@ -8,7 +8,6 @@ class CalendarEntry extends React.Component {
       show: false,
       gcalId: ''
     };
-    this.handleDeleteEvent.bind(this);
   }
 
   showDelete() {
@@ -47,6 +46,7 @@ class CalendarEntry extends React.Component {
     });
   }
 
+
   render() {
     let displayButton = <span onClick={this.deleteEvent.bind(this)}className='glyphicon glyphicon-remove-circle' id='delete'></span>;
     return (
@@ -61,6 +61,7 @@ class CalendarEntry extends React.Component {
         </div>
     );
   }
+
 }
 
 export default CalendarEntry;

@@ -1,4 +1,3 @@
-const googleAuth = require('../auth/googleAuth');
 const googleCal = require('./googleCal');
 
 const removeEvent = (userId, eventId) => {

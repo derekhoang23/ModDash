@@ -4,16 +4,7 @@
 #private keys#
 .env
 
-/client/public/
-/client/dist/bundle.js
-/client/.DS_STORE
-/client/src/.DS_STORE
-/server/.DS_STORE
-/server/utility/.DS_STORE
-/web/dist/bundle.js
-/web/dist/.DS_STORE
-
 npm-debug.log
 
-*/.DS_STORE
-*/*/.DS_STORE
+**/.DS_Store
+**/bundle.js

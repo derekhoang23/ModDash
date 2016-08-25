@@ -14,3 +14,6 @@
 /web/dist/.DS_STORE
 
 npm-debug.log
+
+*/.DS_STORE
+*/*/.DS_STORE

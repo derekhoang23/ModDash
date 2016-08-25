@@ -22,7 +22,7 @@ const authHandler = (req, res) => {
           message: 'Please sign in with Google Cal', 
           url: googleAuth.url
         }); 
-      };
+      }
       // if user is found, log them in and give them the token and unique pubnub channel
       if (user) {
         var token = jwt.signJWT(user.dataValues.id);
@@ -36,15 +36,15 @@ const authHandler = (req, res) => {
           token,
           channel: user.dataValues.pubnubid
         });
-      };
-    })
+      }
+    });
   })
   .catch(err => {
     console.log('did not get users profile', err);
     res.json({
       success: false,
       message: 'Please try logging in again'
-    })
+    });
   });
 };
 
@@ -69,7 +69,7 @@ const authCallback = (req, res) => {
       // Could redirect them to same splash page
         // res.redirect('/')
       }
-    })
+    });
   })
   .catch(err => {
     console.warn('Did not find user\'s profile in db for web oAuth', err);

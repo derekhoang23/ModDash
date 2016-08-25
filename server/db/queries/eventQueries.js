@@ -60,8 +60,8 @@ const deleteEvent = (eventId) => {
   })
   .catch(err => {
     console.log('did not delete from db', err);
-  })
-}
+  });
+};
 
 module.exports = {
   insertEvent,

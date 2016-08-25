@@ -13,6 +13,7 @@ class Calendar extends React.Component {
   }
 
   render() {
+    // let pop = <div><strong>Holy guacamole!</strong> Check this info.</div>;
     return (
       <div className='calendar'>
         <div className='calendar-title'>

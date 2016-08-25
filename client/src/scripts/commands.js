@@ -104,8 +104,11 @@ const fillOutForm = (wildcard) => {
   let date = Object.assign(dateObject.impliedValues, dateObject.knownValues);
 
   // Add leading zeroes to month/day if less than 10
-  (date.month < 10) ? date.month = `0${date.month}` : date.month = `${date.month}`;
-  (date.day < 10) ? date.day = `0${date.day}` : date.day = `${date.day}`;
+  // (date.month < 10) ? date.month = `0${date.month}` : date.month = `${date.month}`;
+  // (date.day < 10) ? date.day = `0${date.day}` : date.day = `${date.day}`;
+
+  (date.month < 10) ? `0${date.month}` : `${date.month}`;
+  (date.day < 10) ? `0${date.day}` : `${date.day}`;
 
   // Format time
   let time = '';
@@ -117,9 +120,9 @@ const fillOutForm = (wildcard) => {
   let formInfo = {
     summary: eventName,
     location: location,
-    startDate: `${date.year}-${date.month}-${date.day}`,
+    startDate: `${date.month}/${date.day}/${date.year}`,
     startTime: time,
-    endDate: `${date.year}-${date.month}-${date.day}`,
+    endDate: `${date.month}/${date.day}/${date.year}`,
     endTime: time
   };
 

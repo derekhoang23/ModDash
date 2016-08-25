@@ -72,6 +72,15 @@ class Form extends React.Component {
     return `${hours}:${minutes}`;
   }
 
+  convertDate(date) {
+    let dateSplit = date.split('/');
+    let month = (dateSplit[0] < 10) ? `0${dateSplit[0]}` : `${dateSplit[0]}`;
+    let day = (dateSplit[1] < 10) ? `0${dateSplit[1]}` : `${dateSplit[1]}`;
+    let year = dateSplit[2];
+    
+    return `${year}-${month}-${day}`;
+  }
+
   toggleArtyomListener() {
     if (this.state.artyomListening) {
       artyomStop();
@@ -130,6 +139,7 @@ class Form extends React.Component {
     // TO DO: Use geolocation to update timeZone automatically
 
     // Create event object with Form's state
+    let date = this.convertDate(this.state.startDate);
     let time = this.convertToMilitaryTime(this.state.startTime);
     let recur = `RRULE:FREQ=${this.state.repeat};COUNT=${this.state.repeatEvery};BYDAY=${this.state.days.map((day) => day)}`;
 
@@ -139,11 +149,11 @@ class Form extends React.Component {
         summary: this.state.summary,
         location: this.state.location,
         start: {
-          dateTime: `${this.state.startDate}T${time}:00-07:00`,
+          dateTime: `${date}T${time}:00-07:00`,
           timeZone: 'America/Los_Angeles'
         },
         end: {
-          dateTime: `${this.state.endDate}T${time}:00-07:00`,
+          dateTime: `${date}T${time}:00-07:00`,
           timeZone: 'America/Los_Angeles'
         }
       };
@@ -152,11 +162,11 @@ class Form extends React.Component {
         summary: this.state.summary,
         location: this.state.location,
         start: {
-          dateTime: `${this.state.startDate}T${this.state.startTime}:00-07:00`,
+          dateTime: `${date}T${time}:00-07:00`,
           timeZone: 'America/Los_Angeles'
         },
         end: {
-          dateTime: `${this.state.endDate}T${this.state.endTime}:00-07:00`,
+          dateTime: `${date}T${time}:00-07:00`,
           timeZone: 'America/Los_Angeles'
         },
         recurrence: [recur]

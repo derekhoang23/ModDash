@@ -104,9 +104,6 @@ const fillOutForm = (wildcard) => {
   let date = Object.assign(dateObject.impliedValues, dateObject.knownValues);
 
   // Add leading zeroes to month/day if less than 10
-  // (date.month < 10) ? date.month = `0${date.month}` : date.month = `${date.month}`;
-  // (date.day < 10) ? date.day = `0${date.day}` : date.day = `${date.day}`;
-
   (date.month < 10) ? `0${date.month}` : `${date.month}`;
   (date.day < 10) ? `0${date.day}` : `${date.day}`;
 

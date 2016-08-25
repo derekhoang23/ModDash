@@ -1,17 +1,25 @@
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: white;
-  background:
-    url("https://unsplash.it/1440/900?random")
-    center center / 100% 100%
-    fixed;
   cursor: default;
 }
 
-.{
-  margin: 10px;
-}
 
+.background {
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  z-index: -1;
+  background-color: transparent;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  display: block;
+}
 
 .navigation {
   border: 0;

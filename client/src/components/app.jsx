@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Background from './Background.jsx';
 import Time from './Time.jsx';
 import Calendar from './Calendar.jsx';
 import Form from './Form.jsx';
@@ -163,6 +164,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
+        <Background />
         <div>
           <Navigation
             toggleEventForm = {this.toggleEventForm}

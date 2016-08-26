@@ -4,7 +4,7 @@ const Sequelize = require('sequelize');
 const db = new Sequelize('velocitydashdb', process.env.PSQL_username, process.env.PSQL_password, {
   dialect: 'postgres',
   protocol: 'postgres',
-  host: 'velocitydashdb.cqdxw6kmfwjk.us-west-2.rds.amazonaws.com',
+  host: process.env.AWS_PSQL,
   port: 5432,
   dialectOptions: { ssl: true },
   logging: false,

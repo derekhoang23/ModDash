@@ -26,6 +26,26 @@ body {
   background-color: rgba(0, 0, 0, 0);
 }
 
+.repeat{
+  margin-right: 10px;
+}
+
+.repeat-every{
+  margin-right: 5px;
+}
+
+.repeat-button {
+  float: left;
+}
+
+label{
+  font-weight: 100;
+  margin-top: 10px;
+  margin-left: 25px;
+  margin-right: 5px:
+}
+
+
 #delete {
   margin-left: 5px;
   font-size: 75%;

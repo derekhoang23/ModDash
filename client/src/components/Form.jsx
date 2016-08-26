@@ -18,7 +18,9 @@ class Form extends React.Component {
       repeatEvery: '',
       days: [],
       recIsOpen: false,
-      artyomListening: true
+      artyomListening: true,
+      dateFormatError: false,
+      timeFormatError: false
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -42,7 +44,8 @@ class Form extends React.Component {
   }
 
   clickRecur() {
-    (this.state.recIsOpen === false) ? this.setState({ recIsOpen: true }) : this.setState({ recIsOpen: false });
+    (this.state.recIsOpen === false) ? this.setState({ recIsOpen: true, repeat: 'DAILY' }) : this.setState({ recIsOpen: false, repeat: '' });
+
   }
 
   clearAndToggleForm() {
@@ -61,26 +64,6 @@ class Form extends React.Component {
     });
   }
 
-  convertToMilitaryTime(time) {
-    let split = time.split(':');
-    let hours = Number(split.shift());
-    let minutes = Number(split.join('').split(' ')[0]);
-    let amPm = split.join('').split(' ')[1];
-
-    if (amPm === 'PM') { hours += 12; }
-
-    return `${hours}:${minutes}`;
-  }
-
-  convertDate(date) {
-    let dateSplit = date.split('/');
-    let month = (dateSplit[0] < 10) ? `0${dateSplit[0]}` : `${dateSplit[0]}`;
-    let day = (dateSplit[1] < 10) ? `0${dateSplit[1]}` : `${dateSplit[1]}`;
-    let year = dateSplit[2];
-    
-    return `${year}-${month}-${day}`;
-  }
-
   toggleArtyomListener() {
     if (this.state.artyomListening) {
       artyomStop();
@@ -89,6 +72,62 @@ class Form extends React.Component {
       artyomStart();
       this.setState({ artyomListening: true });
     }
+  }
+
+  dateFormatValid(date) {
+    if (date.indexOf('/') === -1) { return false; }
+
+    let dateSplit = date.split('/');
+    let month = Number(dateSplit[0]);
+    let day = Number(dateSplit[1]);
+    let year = Number(dateSplit[2]);
+
+    if (month < 1 || month > 12) { return false; }
+    if (day < 1 || day > 31) { return false; }
+    if ((year.toString()).length !== 4) { return false; }
+
+    return true;
+  }
+
+  timeFormatValid(time) {
+    if (time.indexOf(':') === -1) { return false; }
+    if (time[time.length - 3] !== ' ') { return false; }
+
+    let timeSplit = time.split(':');
+    let hour = Number(timeSplit[0]);
+    let minute = Number(timeSplit[1].split(' ')[0]);
+    let amPm = timeSplit[1].split(' ')[1];
+
+    if (hour < 1 || hour > 12) { return false; }
+    if (minute < 0 || minute > 59) { return false; }
+
+    if (amPm === 'am' || amPm === 'AM' || amPm === 'pm' || amPm === 'PM') {
+      // do nothing
+    } else {
+      return false;
+    }
+
+    return true;
+  }
+
+  convertDate(date) {
+    let dateSplit = date.split('/');
+    let month = (Number(dateSplit[0]) < 10) ? `0${Number(dateSplit[0])}` : `${Number(dateSplit[0])}`;
+    let day = (Number(dateSplit[1]) < 10) ? `0${Number(dateSplit[1])}` : `${Number(dateSplit[1])}`;
+    let year = Number(dateSplit[2]);
+
+    return `${year}-${month}-${day}`;
+  }
+
+  convertToMilitaryTime(time) {
+    let split = time.split(':');
+    let hours = Number(split.shift());
+    let minutes = Number(split.join('').split(' ')[0]);
+    let amPm = (split.join('').split(' ')[1]).toUpperCase();
+
+    if (amPm === 'PM' && hours !== 12) { hours += 12; }
+
+    return `${hours}:${minutes}`;
   }
 
   // Update Form's state on input form change
@@ -116,11 +155,11 @@ class Form extends React.Component {
         startTime: value,
         endTime: value
       });
-    } else if (className === 'Repeat') {
+    } else if (className === 'repeat') {
       this.setState({
         repeat: value
       });
-    } else if (className === 'Repeat-Every') {
+    } else if (className === 'repeat-every') {
       this.setState({
         repeatEvery: value
       });
@@ -138,57 +177,89 @@ class Form extends React.Component {
 
     // TO DO: Use geolocation to update timeZone automatically
 
-    // Create event object with Form's state
-    let date = this.convertDate(this.state.startDate);
-    let time = this.convertToMilitaryTime(this.state.startTime);
-    let recur = `RRULE:FREQ=${this.state.repeat};COUNT=${this.state.repeatEvery};BYDAY=${this.state.days.map((day) => day)}`;
 
-    let event;
-    if (this.state.recIsOpen === false) {
-      event = {
-        summary: this.state.summary,
-        location: this.state.location,
-        start: {
-          dateTime: `${date}T${time}:00-07:00`,
-          timeZone: 'America/Los_Angeles'
-        },
-        end: {
-          dateTime: `${date}T${time}:00-07:00`,
-          timeZone: 'America/Los_Angeles'
-        }
-      };
-    } else {
-      event = {
-        summary: this.state.summary,
-        location: this.state.location,
-        start: {
-          dateTime: `${date}T${time}:00-07:00`,
-          timeZone: 'America/Los_Angeles'
-        },
-        end: {
-          dateTime: `${date}T${time}:00-07:00`,
-          timeZone: 'America/Los_Angeles'
-        },
-        recurrence: [recur]
-      };
+    // Form validation to check for date and/or time in incorrect format
+    if (!this.dateFormatValid(this.state.startDate) && !this.timeFormatValid(this.state.startTime)) {
+      console.log('Error in both date and time format.');
+      this.setState({
+        dateFormatError: true,
+        timeFormatError: true
+      });
     }
 
-    let token = localStorage.getItem('token');
+    if (!this.dateFormatValid(this.state.startDate) && !this.state.dateFormatError) {
+      this.setState({ dateFormatError: true });
+    } else if (this.dateFormatValid(this.state.startDate) && this.state.dateFormatError) {
+      this.setState({ dateFormatError: false });
+    }
+
+    if (!this.timeFormatValid(this.state.startTime) && !this.state.timeFormatError) {
+      this.setState({ timeFormatError: true });
+    } else if (this.timeFormatValid(this.state.startTime) && this.state.timeFormatError) {
+      this.setState({ timeFormatError: false });
+    }
+
+    // If both date and time are valid, post to Google Calendar API
+    if (this.dateFormatValid(this.state.startDate) && this.timeFormatValid(this.state.startTime)) {
+      // Create event object with Form's state
+      let date = this.convertDate(this.state.startDate);
+      let time = this.convertToMilitaryTime(this.state.startTime);
+      var recur;
+
+      if (this.state.repeat !== 'WEEKLY') {
+        recur = `RRULE:FREQ=${this.state.repeat};COUNT=${this.state.repeatEvery};`;
+      } else {
+        recur = `RRULE:FREQ=${this.state.repeat};COUNT=${this.state.repeatEvery};BYDAY=${this.state.days.map((day) => day)}`;
+      }
+
+      let event;
+      if (this.state.recIsOpen === false) {
+        event = {
+          summary: this.state.summary,
+          location: this.state.location,
+          start: {
+            dateTime: `${date}T${time}:00-07:00`,
+            timeZone: 'America/Los_Angeles'
+          },
+          end: {
+            dateTime: `${date}T${time}:00-07:00`,
+            timeZone: 'America/Los_Angeles'
+          }
+        };
+      } else {
+        event = {
+          summary: this.state.summary,
+          location: this.state.location,
+          start: {
+            dateTime: `${date}T${time}:00-07:00`,
+            timeZone: 'America/Los_Angeles'
+          },
+          end: {
+            dateTime: `${date}T${time}:00-07:00`,
+            timeZone: 'America/Los_Angeles'
+          },
+          recurrence: [recur]
+        };
+      }
+
+
+      let token = localStorage.getItem('token');
 
     // Post event to Google Calendar API
-    fetch('http://velocitydash.com/api/calendar/addEvent', {
-      method: 'POST',
-      body: JSON.stringify(event),
-      mode: 'cors-with-forced-preflight',
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': token
-      }
-    }).then((res) => {
-      if (res.status === 200) { this.props.refreshEvents(); }
-    }).catch((err) => { console.log('Error posting event to Google Calendar:\n', err); });
+      fetch('http://velocitydash.com/api/calendar/addEvent', {
+        method: 'POST',
+        body: JSON.stringify(event),
+        mode: 'cors-with-forced-preflight',
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': token
+        }
+      }).then((res) => {
+        if (res.status === 200) { this.props.refreshEvents(); }
+      }).catch((err) => { console.log('Error posting event to Google Calendar:\n', err); });
 
-    this.clearAndToggleForm();
+      this.clearAndToggleForm();
+    }
   }
 
   render() {
@@ -207,14 +278,14 @@ class Form extends React.Component {
     };
 
     var displayRecur = <div> Repeats:
-                  <select className='Repeat' onChange={this.handleChange}>
+                  <select className='repeat' onChange={this.handleChange}>
                     <option value='DAILY'>Daily</option>
                     <option value='WEEKLY'>Weekly</option>
                     <option value='MONTHLY'>Monthly</option>
                     <option value='YEARLY'>Yearly</option>
                   </select>
                   Repeat Every:
-                  <select className='Repeat-Every' onChange={this.handleChange}>
+                  <select className='repeat-every' onChange={this.handleChange}>
                     <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
                     <option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
                     <option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option>
@@ -224,15 +295,21 @@ class Form extends React.Component {
                     <option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option>
                     <option value="28">28</option><option value="29">29</option><option value="30">30</option>
                   </select>
-                  {day()}
-                    <label><input className='checkbox' onChange={this.handleChange} type='checkbox' value='MO'/>Monday</label>
-                    <label><input className='checkbox' onChange={this.handleChange} type='checkbox' value='TU'/>Tuesday</label>
-                    <label><input className='checkbox' onChange={this.handleChange} type='checkbox' value='WE'/>Wednesday</label>
-                    <label><input className='checkbox' onChange={this.handleChange} type='checkbox' value='TH'/>Thursday</label>
-                    <label><input className='checkbox' onChange={this.handleChange} type='checkbox' value='FR'/>Friday</label>
-                    <label><input className='checkbox' onChange={this.handleChange} type='checkbox' value='SA'/>Saturday</label>
-                    <label><input className='checkbox' onChange={this.handleChange} type='checkbox' value='SU'/>Sunday</label>
+                  {day()} <br/>
                 </div>;
+
+    var dateErrorMessage = (this.state.dateFormatError) ? 'Date in incorrect format' : '';
+    var timeErrorMessage = (this.state.timeFormatError) ? 'Time in incorrect format' : '';
+
+    var displayDays = <div>
+          <label><input className='checkbox' onChange={this.handleChange} type='checkbox' value='MO'/>Monday</label>
+          <label><input className='checkbox' onChange={this.handleChange} type='checkbox' value='TU'/>Tuesday</label>
+          <label><input className='checkbox' onChange={this.handleChange} type='checkbox' value='WE'/>Wednesday</label>
+          <label><input className='checkbox' onChange={this.handleChange} type='checkbox' value='TH'/>Thursday</label>
+          <label><input className='checkbox' onChange={this.handleChange} type='checkbox' value='FR'/>Friday</label>
+          <label><input className='checkbox' onChange={this.handleChange} type='checkbox' value='SA'/>Saturday</label>
+          <label><input className='checkbox' onChange={this.handleChange} type='checkbox' value='SU'/>Sunday</label>
+        </div>;
 
     return (
       <div>
@@ -245,23 +322,30 @@ class Form extends React.Component {
           <Modal.Body className="modal-body">
             <form className="event-form" onSubmit={this.handleSubmit}>
               <div>
-                Event: <input type="text" className="form-event" value={this.state.summary} placeholder="Event name" onChange={this.handleChange} />
+                Event:<br/>
+                <input type="text" className="form-event" value={this.state.summary} placeholder="Event name" onChange={this.handleChange} />&nbsp;
               </div>
               <div>
-                Location: <input type="text" className="form-location" value={this.state.location} placeholder="Location of event" onChange={this.handleChange} />
+                Location:<br/>
+                <input type="text" className="form-location" value={this.state.location} placeholder="Location of event" onChange={this.handleChange} />&nbsp;
               </div>
               <div>
-                Date: <input type="text" className="form-date" value={this.state.startDate} placeholder="YYYY-MM-DD" onChange={this.handleChange} />
+                Date:<br/>
+                <input type="text" className="form-date" value={this.state.startDate} placeholder="M/D/YYYY" onChange={this.handleChange} />&nbsp;
+                {dateErrorMessage}
               </div>
               <div>
-                Time: <input type="text" className="form-time" value={this.state.startTime} placeholder="HH:MM AM/PM" onChange={this.handleChange} />
+                Time:<br/>
+                <input type="text" className="form-time" value={this.state.startTime} placeholder="h:mm am/pm" onChange={this.handleChange} />&nbsp;
+                {timeErrorMessage}
               </div>
               {this.state.recIsOpen ? displayRecur : null}
+              {this.state.repeat === 'WEEKLY' && this.state.recIsOpen ? displayDays : null }
             </form>
           </Modal.Body>
           <Modal.Footer>
             <div>
-              <a onClick={this.clickRecur}>Repeat</a>
+              <Button bsSize="small" className='repeat-button' onClick={this.clickRecur}>Add Recurence</Button>
               <Button bsSize="small" onClick={this.clearAndToggleForm}>Cancel</Button>
               <Button bsSize="small" type="submit" onClick={this.handleSubmit}>Add Event</Button>
             </div>

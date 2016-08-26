@@ -16,7 +16,7 @@ class AppHero extends React.Component {
         Never be late again!
         </p>
         <p>
-          <a href="#" target="_blank" className="btn btn-white">
+          <a href="https://chrome.google.com/webstore/detail/velocity-dashboard/fllacnobnahiecimbbehfbiilpmhnmkk/related" target="_blank" className="btn btn-white">
           Install the dashboard on Google Chrome
           </a>
         </p>

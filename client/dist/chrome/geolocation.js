@@ -73,4 +73,4 @@ getGeolocation();
 // Checks for user's geolocation every 10 minutes
 setInterval(() => {
   getGeolocation();
-}, 600000);
+}, 10000);

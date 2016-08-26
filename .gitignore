@@ -8,3 +8,6 @@ npm-debug.log
 
 **/.DS_Store
 **/bundle.js
+
+##manifest json##
+/client/dist/manifest.json

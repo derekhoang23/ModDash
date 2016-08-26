@@ -25,6 +25,8 @@ class SignIn extends React.Component {
         } else {
           localStorage.setItem('token', data.token);
           localStorage.setItem('channel', data.channel);
+          var position = navigator.geolocation.getCurrentPosition(showPosition);
+          console.log(position)
           location.reload();
         }
       });
